@@ -90,11 +90,8 @@ private fun ItemsComponent(modifier: Modifier = Modifier,
     LazyColumn(modifier = modifier,
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(
-            items = objects,
-            key = { museumObject -> museumObject.id }
-        ) { item ->
-            ArtObject(item, onClick = {
+        itemsIndexed(objects) { index, item ->
+            ArtObject(item, onArtObjectClick = {
                 onClickArtObject(item.id)
             })
         }

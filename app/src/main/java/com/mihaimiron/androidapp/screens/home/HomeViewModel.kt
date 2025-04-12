@@ -23,6 +23,7 @@ class HomeViewModel(
     val isLastPage = _isLastPage.asStateFlow()
 
     private var page = 0
+    private val loadedIds = mutableSetOf<Int>()
 
     init {
         nextPage()
@@ -34,13 +35,22 @@ class HomeViewModel(
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getObjects(page)
-            val objects = result.getOrDefault(emptyList())
+            val newObjects = result.getOrDefault(emptyList())
 
-            if (objects.isEmpty()) {
+            if (newObjects.isEmpty()) {
                 _isLastPage.value = true
             } else {
-                _objects.value += objects
-                page++
+                // Filter out any objects we've already loaded
+                val uniqueNewObjects = newObjects.filter { obj -> 
+                    loadedIds.add(obj.id)
+                }
+                
+                if (uniqueNewObjects.isEmpty()) {
+                    _isLastPage.value = true
+                } else {
+                    _objects.value = _objects.value + uniqueNewObjects
+                    page++
+                }
             }
 
             _isLoading.value = false

@@ -78,7 +78,7 @@ dependencies {
     implementation(libs.retrofit.moshiConverter)
     implementation(libs.retrofit.loggingInterceptor)
     implementation(libs.koin.android)
-    implementation(libs.koin.compose)
     implementation(libs.glide)
     implementation(libs.glide.compose)
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
