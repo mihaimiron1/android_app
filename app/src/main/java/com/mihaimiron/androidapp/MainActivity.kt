@@ -15,6 +15,8 @@ import com.mihaimiron.androidapp.routes.SearchRoute
 import com.mihaimiron.androidapp.screens.details.DetailsScreen
 import com.mihaimiron.androidapp.screens.home.HomeScreen
 import com.mihaimiron.androidapp.screens.search.SearchScreen
+import com.mihaimiron.androidapp.routes.FavoriteRoute
+import com.mihaimiron.androidapp.screens.favorites.FavoriteScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +39,17 @@ fun NavBar() {
         startDestination = HomeRoute
     ) {
         composable<HomeRoute> {
-            HomeScreen(onSearch = {
-                navController.navigate(SearchRoute)
-            }, onClickArtObject = { objectId ->
-                navController.navigate(DetailsRoute(objectId))
-            })
+            HomeScreen(
+                onSearch = {
+                    navController.navigate(SearchRoute)
+                },
+                onClickArtObject = { objectId ->
+                    navController.navigate(DetailsRoute(objectId))
+                },
+                onFavoritesClick = {
+                    navController.navigate(FavoriteRoute)
+                }
+            )
         }
         composable<SearchRoute> {
             SearchScreen(onGoBack = {
@@ -54,6 +62,16 @@ fun NavBar() {
             DetailsScreen(onGoBack = {
                 navController.popBackStack()
             })
+        }
+        composable<FavoriteRoute> {
+            FavoriteScreen(
+                onGoBack = {
+                    navController.popBackStack()
+                },
+                onClickArtObject = { objectId ->
+                    navController.navigate(DetailsRoute(objectId))
+                }
+            )
         }
     }
 }
